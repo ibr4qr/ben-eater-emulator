@@ -103,7 +103,7 @@ As said before we have 4 modules, the VM ( emulator ), the Assembler, the Compil
 
 
 #### UML PACKAGE DIAGRAM
-![UML Package Diagram](./docs/images/uml-package-diagram.png.png?raw=true)
+![UML Package Diagram](./docs/images/uml-package-diagram.png?raw=true)
 
 
 We will split the into 2 groups:
