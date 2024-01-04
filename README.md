@@ -37,8 +37,16 @@ This module will produce a system software that will reverse an assembly file in
 ## Ben Eater Computer Emualtor Design
 
 ### Registers
-Let's start with registers, the architecture features two registers, named, Register A and Register B.
+Let's start with registers, the architecture features three registers, named, Register A, Register B, Register IR 
 
-So in this simple design we have two registers.
-- Register A
+So in this simple design we have two general purposes registers.
+
+- Register A 
 - Register B
+
+And we have a special purpose register, specifically the IR register will hold the current instruction that's being executed.
+
+### RAM ( Random Access Memory )
+
+The RAM, stores the program currently the computer is executing and the data.
+The computer uses 4-bit addresses which means it will only have 16 bytes of RAM, limiting the size and complexity of programs it can run. This is by far its biggest limitation.
