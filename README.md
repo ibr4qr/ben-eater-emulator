@@ -8,7 +8,7 @@ This Project is for learning purpose, in fact we are trying to build a toolchain
 
 ## Architecture of Physical Machine
 
-![Architecture of physical machine](https://en.wikipedia.org/wiki/Simple-As-Possible_computer#/media/File:Ben_Eater_SAP_High_Level_Overview.jpg)
+[Architecture of physical machine](https://en.wikipedia.org/wiki/Simple-As-Possible_computer#/media/File:Ben_Eater_SAP_High_Level_Overview.jpg)
 
 
 ## Overview
@@ -49,6 +49,12 @@ So in this simple design we have two general purposes registers.
 - Register A 
 - Register B
 
+In this architecture we have special registers as well:
+- Program Counter PC ( Holds the address of next instruction to be executed )
+- Memory Address Register MI ( holds the the address of main memory )
+- Instruction Register IR ( holds the current instruction that's being executed)
+
+
 And we have a special purpose register, specifically the IR register will hold the current instruction that's being executed.
 
 ### RAM ( Random Access Memory )
@@ -88,4 +94,25 @@ Instructions are 8 bit long, and include.
 - HALT  => 0b1111 @ 0b0000
 
 
+## Modules
+As said before we have 4 modules, the VM ( emulator ), the Assembler, the Compiler, and the Decompiler.
+See this for more info: [Modules](https://drive.google.com/file/d/1ZoLH9AX8poLbaJ4bwcDbOXQvUX3F_C3E/view?usp=drive_link)
 
+
+We will split the into 2 groups:
+- Compiling ( Assembler, Compiler, Decompiler)
+- Executing ( Emulator )
+
+
+### Compiling 
+Compiling Module will have all submodules that enable us to write code in a higher level human readable manner.
+
+
+
+### Executing
+Executing Modules is simpler, will have one submodule for now, and will execute the code that is compliant with the instruction set.
+
+Here we have a simple UML componente diagram
+[UML component diagram draw.io version](https://drive.google.com/file/d/1cKRcOjizPqRWN8UWJAC8LEJyJIH5rOlo/view?usp=sharing)
+
+[UML component diagram image version](./docs/images/uml-component-diagram.png)
