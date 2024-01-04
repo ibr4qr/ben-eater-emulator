@@ -96,9 +96,14 @@ Instructions are 8 bit long, and include.
 
 ## Modules
 As said before we have 4 modules, the VM ( emulator ), the Assembler, the Compiler, and the Decompiler.
-See this for more info: [Modules](https://drive.google.com/file/d/1ZoLH9AX8poLbaJ4bwcDbOXQvUX3F_C3E/view?usp=drive_link)
 
+#### High Level Overview
 ![High Level Modules](./docs/images/high-level-architecture.png?raw=true)
+
+
+
+#### UML PACKAGE DIAGRAM
+![UML Package Diagram](./docs/images/uml-package-diagram.png.png?raw=true)
 
 
 We will split the into 2 groups:
