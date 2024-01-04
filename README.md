@@ -1,4 +1,5 @@
 Ben Eater Machine
+===================================
 
 Simple Toolchain around the Simple As Possible Ben Eater computer architecure, including a VM ( emulator ), assembler, compiler, decompiler.
 
@@ -7,8 +8,9 @@ This Project is for learning purpose, in fact we are trying to build a toolchain
 
 [Ben Eater Simple as Possible Architecture](https://en.wikipedia.org/wiki/Simple-As-Possible_computer)
 
-# Glossary
+
 - [Ben Eater Machine](#initial)
+- [Overview](#overview)
 
 ## Architecture of Physical Machine
 
