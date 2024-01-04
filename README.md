@@ -34,9 +34,9 @@ This module will produce a system software that will reverse an assembly file in
 
 
 
-#### Ben Eater Computer Emualtor Design
+## Ben Eater Computer Emualtor Design
 
-##### Registers
+### Registers
 Let's start with registers, the architecture features two registers, named, Register A and Register B.
 
 So in this simple design we have two registers.
