@@ -11,6 +11,25 @@ This Project is for learning purpose, in fact we are trying to build a toolchain
 
 - [Ben Eater Machine](#initial)
 - [Overview](#overview)
+    - [Ben Eater Computer Emualtor](#ben-eater-computer-emulator)
+    - [Assembler](#assembler)
+    - [Compiler](#compiler)
+    - [Decompiler](#decompiler)
+- [Ben Eater Computer Emualtor Design](#ben-eater-computer-emulator-design)
+    - [Registers](#registers)
+    - [RAM ( Random Access Memory )](#random-access-memory)
+    - [Program Counter](#program-counter)
+    - [Arithmetic logic unit](#arithmetic-logic-unit)
+- [How everything works together](#how-everything-works-together)
+- [Instruction Set](#instruction-set)
+- [Modules](#modules)
+    - [High Level Overview](#high-level-overview)
+    - [Uml Package Diagram](#uml-package-diagram)
+    - [Uml Component Diagram](#uml-component-diagram)
+- [Compiling](#compiling)
+- [Executing](#executing)
+
+
 
 ## Architecture of Physical Machine
 
@@ -103,26 +122,28 @@ Instructions are 8 bit long, and include.
 ## Modules
 As said before we have 4 modules, the VM ( emulator ), the Assembler, the Compiler, and the Decompiler.
 
-#### High Level Overview
+### High Level Overview
 ![High Level Modules](./docs/images/high-level-architecture.png?raw=true)
 
 
 
-#### UML PACKAGE DIAGRAM
+### Uml Package Diagram
 ![UML Package Diagram](./docs/images/uml-package-diagram.png?raw=true)
 
+### Uml Component Diagram
+![UML Component Diagram](./docs/images/uml-component-diagram.png?raw=true)
 
 We will split the into 2 groups:
 - Compiling ( Assembler, Compiler, Decompiler)
 - Executing ( Emulator )
 
 
-### Compiling 
+## Compiling 
 Compiling Module will have all submodules that enable us to write code in a higher level human readable manner.
 
 
 
-### Executing
+## Executing
 Executing Modules is simpler, will have one submodule for now, and will execute the code that is compliant with the instruction set.
 
 Here we have a simple UML componente diagram
