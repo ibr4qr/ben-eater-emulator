@@ -1,28 +1,37 @@
-pub fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
-
-// This is a really bad adding function, its purpose is to fail in this
-// example.
-#[allow(dead_code)]
-fn bad_add(a: i32, b: i32) -> i32 {
-    a - b
-}
-
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
+    use compiler::rom::{ build_rom, Rom};
+
 
     #[test]
-    fn test_add() {
-        assert_eq!(add(1, 2), 3);
-    }
+    fn test_rom_component() {
+        let mut memory: Rom = build_rom();
+        memory.set_value(10,20);
 
-    #[test]
-    fn test_bad_add() {
-        // This assert would fire and test will fail.
-        // Please note, that private functions can be tested too!
-        assert_eq!(bad_add(1, 2), 3);
+        let value = memory.load_value(10).unwrap();
+        
+        assert_eq!(value, &20);
+        
+        memory.set_value(10,200);
+
+        let another_value = memory.load_value(10).unwrap();
+        assert_ne!(another_value, &20);
+
+        assert_eq!(another_value, &200);
+
+
+        let mut another_rom: Rom = build_rom();
+
+
+        let program = [0, 10, 10, 20, 30];
+        let address_number = 2;
+        let expected_value = 10;
+
+        
+        another_rom.load_program(&program);
+
+        let value = another_rom.load_value(address_number).unwrap();
+
+        assert_eq!(value, &expected_value)
     }
 }
