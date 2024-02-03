@@ -11,10 +11,10 @@ pub mod rom;
 fn main() {
     /**
      * sample program
-     * LDA 17
-     * LDA 20
+     * LDI 17
+     * LDI 20
      * OUT
-     * LDA 17 
+     * LDI 17 
      * OUT
      */
     let sample1 = [17, 20, 0, 17, 0];
@@ -40,7 +40,25 @@ fn main() {
 
     let sample3 = [0b01111010, 0b00000000, 0b01100000];
 
+
+
+    /**
+     * LDI 1
+     * OUT
+     * STA 13
+     * LDI 10
+     * SUB 13
+     * OUT 
+     * STA 14
+     * LDI 2
+     */
+
+
+    let sample4 = [0b01110001, 0b00000000, 0b01001011, 0b01111010, 0b00111011, 0b00000000, 0b01001100, 0b01110110, 0b00101100, 0b00000000];
+
+    
     let mut emulator:Emulator = build_emulator();
-    emulator.load_program(&sample3);
-    emulator.execute_program()
+    emulator.load_program(&sample4);
+    emulator.execute_program();
+    
 }

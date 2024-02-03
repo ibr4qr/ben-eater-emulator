@@ -7,8 +7,10 @@ pub struct Emulator {
     rb: u8,
     mi: u8,
     ir: u8,
+    cf: bool,
+    zf: bool,
     rom: Rom,
-    program_length: usize
+    program_length: usize,
 }
 
 impl Emulator {
@@ -54,6 +56,7 @@ impl Emulator {
                 self.rb = *loaded_value;
                 let diff = self.ra -  self.rb;
                 self.ra = diff;
+                self.zf = diff == 0;
             }
             4 => {
                 // STA 
@@ -77,9 +80,19 @@ impl Emulator {
                 println!("LDI {}", value);
                 self.ra = value;
             },
+            7 => {
+                // JC
+                if self.cf {
+                    self.pc = value;
+                    self.ir = value;
+                }
+            },
             8 => {
-                self.pc = value;
-                self.ir = value;
+                //JZ
+                if self.zf {
+                    self.pc = value;
+                    self.ir = value;
+                }
             }
             _ => println!("it s something else"),
         }
@@ -110,6 +123,8 @@ pub fn build_emulator() -> Emulator {
         rb: 0,
         mi: 0,
         ir: 0,
+        cf: false,
+        zf: false,
         rom: build_rom()
     }
 }
