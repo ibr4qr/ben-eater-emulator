@@ -43,9 +43,9 @@ impl Emulator {
             2 => {
                 // ADD 
                 let memory_address = value;
-                println!("memory address: {}", memory_address);
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
+                println!("ADD {} {}", self.ra, self.rb);
                 let sum = self.ra + self.rb;
                 self.ra = sum;
             },
@@ -54,19 +54,24 @@ impl Emulator {
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
+                println!("SUB ({} - {})", self.ra, self.rb);
                 let diff = self.ra -  self.rb;
+
                 self.ra = diff;
                 self.zf = diff == 0;
+                self.cf = diff != 0;
             }
             4 => {
                 // STA 
                 let address = value;
                 let value = self.ra;
                 self.rom.set_value(address, value);
+
+                println!("STA {}", address);
             }
             0 => {
                 let value = self.ra;
-                println!("PRINTED VALUE: {}", value);
+                println!("OUT {}", value);
             },
             6 => {
                 // SET PC TO AAAA 
@@ -80,23 +85,34 @@ impl Emulator {
                 println!("LDI {}", value);
                 self.ra = value;
             },
-            7 => {
+            9 => {
                 // JC
                 if self.cf {
                     self.pc = value;
                     self.ir = value;
+                    self.cf = false;
                 }
             },
             8 => {
                 //JZ
-                if self.zf {
+                println!("JZ");
+                if self.zf {c
                     self.pc = value;
                     self.ir = value;
+                    self.zf = false;
                 }
             }
             _ => println!("it s something else"),
         }
         
+
+        println!("
+            ra: {},
+            rb: {},
+            cf: {},
+            zf: {}
+        ", self.ra, self.rb, self.cf, self.zf);
+
     }
 
 
@@ -107,7 +123,6 @@ impl Emulator {
         self.increment_instruction_register();
        }
     }
-
 
 }
 
