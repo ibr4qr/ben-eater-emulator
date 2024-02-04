@@ -61,6 +61,7 @@ fn main() {
      * SUB 15
      * JZ 4
      */
+
     let sample5 = [
         0b01110101, // LDI 5
         0b01001110, // STA 14 ==> 5 is in 14 address memory
@@ -80,7 +81,28 @@ fn main() {
         0b10010011  // JZ  4
     ];
 
+
+    /**
+     * LDI 15
+     * STA 15
+     * LDI 1
+     * STA 14
+     */
+
+
+    // decrement from 15 to 1, loops
+    let sample6 = [
+        0b01111111, // LDI 15
+        0b01001111, // STA 15
+        0b01110001, // LDI 1
+        0b01001110, // STA 14
+        0b00011111, // LDA 15
+        0b00111110, // SUB 14
+        0b10010100, // JC   4
+        0b00000000  // OUT
+    ];
+
     let mut emulator: Emulator = build_emulator();
-    emulator.load_program(&sample5);
+    emulator.load_program(&sample6);
     emulator.execute_program();
 }

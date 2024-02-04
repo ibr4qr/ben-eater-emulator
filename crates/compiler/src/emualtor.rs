@@ -87,6 +87,7 @@ impl Emulator {
             },
             9 => {
                 // JC
+                println!("JC: {}", value);
                 if self.cf {
                     self.pc = value;
                     self.ir = value;
@@ -96,7 +97,7 @@ impl Emulator {
             8 => {
                 //JZ
                 println!("JZ");
-                if self.zf {c
+                if self.zf {
                     self.pc = value;
                     self.ir = value;
                     self.zf = false;
