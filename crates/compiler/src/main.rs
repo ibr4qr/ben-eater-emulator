@@ -98,8 +98,8 @@ fn main() {
         0b01001110, // STA 14
         0b00011111, // LDA 15
         0b00111110, // SUB 14
+        0b00000000, // OUT
         0b10010100, // JC   4
-        0b00000000  // OUT
     ];
 
     let mut emulator: Emulator = build_emulator();

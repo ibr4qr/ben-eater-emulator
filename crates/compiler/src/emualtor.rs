@@ -45,7 +45,7 @@ impl Emulator {
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                println!("ADD {} {}", self.ra, self.rb);
+                // println!("ADD {} {}", self.ra, self.rb);
                 let sum = self.ra + self.rb;
                 self.ra = sum;
             },
@@ -54,7 +54,7 @@ impl Emulator {
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                println!("SUB ({} - {})", self.ra, self.rb);
+                // println!("SUB ({} - {})", self.ra, self.rb);
                 let diff = self.ra -  self.rb;
 
                 self.ra = diff;
@@ -67,7 +67,7 @@ impl Emulator {
                 let value = self.ra;
                 self.rom.set_value(address, value);
 
-                println!("STA {}", address);
+                // println!("STA {}", address);
             }
             0 => {
                 let value = self.ra;
@@ -82,12 +82,12 @@ impl Emulator {
             },
             7 => {
                 // LDI
-                println!("LDI {}", value);
+                // println!("LDI {}", value);
                 self.ra = value;
             },
             9 => {
                 // JC
-                println!("JC: {}", value);
+                // println!("JC: {}", value);
                 if self.cf {
                     self.pc = value;
                     self.ir = value;
@@ -96,7 +96,7 @@ impl Emulator {
             },
             8 => {
                 //JZ
-                println!("JZ");
+                // println!("JZ");
                 if self.zf {
                     self.pc = value;
                     self.ir = value;
@@ -107,12 +107,12 @@ impl Emulator {
         }
         
 
-        println!("
-            ra: {},
-            rb: {},
-            cf: {},
-            zf: {}
-        ", self.ra, self.rb, self.cf, self.zf);
+        // println!("
+        //     ra: {},
+        //     rb: {},
+        //     cf: {},
+        //     zf: {}
+        // ", self.ra, self.rb, self.cf, self.zf);
 
     }
 
