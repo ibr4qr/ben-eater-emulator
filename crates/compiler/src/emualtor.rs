@@ -29,7 +29,6 @@ impl Emulator {
 
         let raw_instruction = instruction >> 4;
         let value = instruction & 0b00001111;
-
         
 
         match raw_instruction {
@@ -38,14 +37,14 @@ impl Emulator {
                 let address = value;
                 let loaded_value = self.rom.load_value(address).unwrap();
                 self.ra = *loaded_value;
-                println!("LDA {}", loaded_value);
+                // println!("PC: {}, LDA {}", self.ir, loaded_value);
             },
             2 => {
                 // ADD 
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                // println!("ADD {} {}", self.ra, self.rb);
+                // println!("PC: {}, ADD {} {}", self.ir, self.ra, self.rb);
                 let sum = self.ra + self.rb;
                 self.ra = sum;
             },
@@ -54,7 +53,7 @@ impl Emulator {
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                // println!("SUB ({} - {})", self.ra, self.rb);
+                // println!("PC: {}, SUB ({} - {})", self.ir, self.ra, self.rb);
                 let diff = self.ra -  self.rb;
 
                 self.ra = diff;
@@ -67,13 +66,15 @@ impl Emulator {
                 let value = self.ra;
                 self.rom.set_value(address, value);
 
-                // println!("STA {}", address);
+                // println!("PC: {}, STA {}", self.ir , address);
             }
             0 => {
                 let value = self.ra;
-                println!("OUT {}", value);
+                // println!("PC: {}, OUT {}", self.ir, value);
+                println!("{}", value);
             },
             6 => {
+                // println!("PC: {}, JMP {}", self.ir, value);
                 // SET PC TO AAAA 
                 let address = value;
                 self.pc = address;
@@ -82,12 +83,12 @@ impl Emulator {
             },
             7 => {
                 // LDI
-                // println!("LDI {}", value);
+                // println!("PC: {}, LDI {}", self.ir, value);
                 self.ra = value;
             },
             9 => {
                 // JC
-                // println!("JC: {}", value);
+                // println!("PC: {}, JC: {}", self.ir, value);
                 if self.cf {
                     self.pc = value;
                     self.ir = value;
@@ -96,7 +97,7 @@ impl Emulator {
             },
             8 => {
                 //JZ
-                // println!("JZ");
+                // println!("PC: {}, JZ {}", self.ir, value);
                 if self.zf {
                     self.pc = value;
                     self.ir = value;

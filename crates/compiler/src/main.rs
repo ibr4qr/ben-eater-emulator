@@ -90,8 +90,17 @@ fn main() {
      */
 
 
-    // decrement from 15 to 1, loops
-    let sample6 = [
+
+
+
+     /**
+      * sample 6 has a decounter from 15 to 0, using the JC, Jump carry 
+      * the JC instruction jumps to an instruction only if the carry Flag cf is set to true
+      * cf is set to true when, given and subtraction the result is not zero
+      */
+
+
+      let sample6 = [
         0b01111111, // LDI 15
         0b01001111, // STA 15
         0b01110001, // LDI 1
@@ -102,7 +111,37 @@ fn main() {
         0b10010100, // JC   4
     ];
 
+
+
+
+
+    // counting to 15
+    let sample7 = [
+        // initialization
+        0b01111111, // LDI 15
+        0b01001111, // STA 15
+        0b01110001, // LDI 1
+        0b01001110, // STA 14
+        0b01110000, // LDI 0
+        0b01001101, // STA 13
+    
+
+        // load initial state to register A
+        0b00011101, // LDA 13,
+
+        // increment counter & persist result
+        0b00101110, //
+        0b01001101, // 
+
+        // check if we need to increment or not
+        0b00011111,
+        0b00111101,
+        0b00000000,
+        0b10010000,
+    ];
+
+
     let mut emulator: Emulator = build_emulator();
-    emulator.load_program(&sample6);
+    emulator.load_program(&sample7);
     emulator.execute_program();
 }
