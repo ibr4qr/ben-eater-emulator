@@ -1,0 +1,8 @@
+LDI 10
+OUT
+
+LDI 10
+OUT
+
+    
+        
