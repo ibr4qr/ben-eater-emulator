@@ -53,7 +53,7 @@ impl Emulator {
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                // println!("PC: {}, SUB ({} - {})", self.ir, self.ra, self.rb);
+                println!("PC: {}, SUB ({} - {})", self.ir, self.ra, self.rb);
                 let diff = self.ra -  self.rb;
 
                 self.ra = diff;
@@ -108,12 +108,12 @@ impl Emulator {
         }
         
 
-        // println!("
-        //     ra: {},
-        //     rb: {},
-        //     cf: {},
-        //     zf: {}
-        // ", self.ra, self.rb, self.cf, self.zf);
+        println!("
+            ra: {},
+            rb: {},
+            cf: {},
+            zf: {}
+        ", self.ra, self.rb, self.cf, self.zf);
 
     }
 
