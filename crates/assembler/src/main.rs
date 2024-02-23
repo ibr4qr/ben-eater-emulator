@@ -1,12 +1,7 @@
-use std::env;
-use std::fs;
-use std::fs::read_to_string;
 use std::fs::File;
-use std::io::{self, BufRead};
-use std::os::macos::raw;
+use std::io::{self, BufRead, Read, Write};
 use std::path::Path;
 use std::u8;
-
 // enum Instructions {
 //     NOP = "NOP",
 //     LDA = "LDA",
@@ -22,7 +17,7 @@ use std::u8;
 //     HALT = "HALT"
 // }
 
-fn getLine(line: String) {
+fn getLine(line: String) -> u8 {
     let parts = line.split(" ");
     let collection = parts.collect::<Vec<&str>>();
     let mut instruction = collection[0];
@@ -80,28 +75,34 @@ fn getLine(line: String) {
 
 
     let mut final_instruction = 0;
-    let mut final_argument = 0;
-    final_instruction = rawInstruction << 4;
-    // final_argument = argument & 00001111;
+    let mut instruction = rawInstruction << 4;
 
+
+    final_instruction = (rawInstruction << 4) & 0b11110000;
     final_instruction = final_instruction | argument;
 
-    println!("instruction: {}, {}", final_instruction, final_argument);
-    println!("final instruction: {}", final_instruction);
+
+    return final_instruction;
 }
 
 fn main() {
     // let mut binary_program = [];
-
+    let mut binary_code: Vec<u8> = vec![];
     // --snip--
     if let Ok(lines) = read_lines("./poem.txt") {
         // Consumes the iterator, returns an (Optional) String
         for line in lines.flatten() {
             if !line.trim().is_empty() {
-                getLine(line);
+                let instruction: u8 = getLine(line);
+                binary_code.push(instruction);
             }
         }
     }
+
+        product_file(&binary_code);
+        // Write a slice of bytes to the file
+        
+       // file.write_all(&[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
 }
 
 // The output is wrapped in a Result to allow matching on errors.
@@ -112,4 +113,22 @@ where
 {
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
+}
+
+
+fn product_file(byte_code: &Vec<u8>) -> std::io::Result<()> {
+    {
+        let mut file = File::create("test")?;
+        // Write a slice of bytes to the file
+        file.write_all(byte_code)?;
+    }
+
+    {
+        let mut file = File::open("test")?;
+        let mut buffer = Vec::<u8>::new();
+        file.read_to_end(&mut buffer)?;
+        println!("assembler produced: {:?}", buffer);
+    }
+
+    Ok(())
 }

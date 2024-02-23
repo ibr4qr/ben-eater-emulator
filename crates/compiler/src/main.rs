@@ -1,4 +1,8 @@
+use std::fs::File;
+use std::io::{self, BufRead, Read, Write};
+
 use emualtor::{build_emulator, Emulator};
+
 
 pub mod emualtor;
 pub mod rom;
@@ -12,6 +16,7 @@ fn main() {
      * LDI 17
      * OUT
      */
+    #[warn(dead_code)]
     let sample1 = [17, 20, 0, 17, 0];
 
     /**
@@ -23,6 +28,7 @@ fn main() {
      * 5, LDA 16
      * 6, OUT
      */
+    #[warn(dead_code)]
     let sample2 = [
         0b01111100, 0b00000000, 0b01001111, 0b01110110, 0b00000000, 0b00000000, 0b00011111, 0,
     ];
@@ -32,6 +38,7 @@ fn main() {
      *  1, OUT
      *  2, JMP
      */
+    #[warn(dead_code)]
     let sample3 = [0b01111010, 0b00000000, 0b01100000];
 
     /**
@@ -61,7 +68,7 @@ fn main() {
      * SUB 15
      * JZ 4
      */
-
+    #[warn(dead_code)]
     let sample5 = [
         0b01110101, // LDI 5
         0b01001110, // STA 14 ==> 5 is in 14 address memory
@@ -99,7 +106,7 @@ fn main() {
       * cf is set to true when, given and subtraction the result is not zero
       */
 
-
+      #[warn(dead_code)]
       let sample6 = [
         0b01111111, // LDI 15
         0b01001111, // STA 15
@@ -114,7 +121,7 @@ fn main() {
 
 
 
-
+    #[warn(dead_code)]
     // counting to 15
     let sample7 = [
         // initialization
@@ -142,8 +149,23 @@ fn main() {
         0b10010000, // JC 
     ];
 
+    let sample9 =  [113, 34, 0];
 
-    let mut emulator: Emulator = build_emulator();
-    emulator.load_program(&sample7);
-    emulator.execute_program();
+
+    if let Ok(binary_code) = get_binary_program() {
+        let mut emulator: Emulator = build_emulator();
+        emulator.load_program(&binary_code);    
+        emulator.execute_program();
+
+    }
+}
+
+#[warn(unused_must_use)]
+fn get_binary_program() -> std::io::Result<(Vec<u8>)>  {
+        let mut file = File::open("./test")?;
+        // read the same file back into a Vec of bytes
+        let mut buffer = Vec::<u8>::new();
+        file.read_to_end(&mut buffer)?;
+
+        Ok((buffer))
 }
