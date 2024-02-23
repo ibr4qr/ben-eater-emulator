@@ -156,3 +156,19 @@ Here we have a simple UML componente diagram
 
 
 ## Starting with Executing
+
+## Assembly language examples:
+
+#### basic LDI, STA, OUT
+
+```
+LDI 12
+OUT 
+STA 14
+LDI 3
+OUT
+LDA 14
+OUT
+```
+
+### Counting to 5
