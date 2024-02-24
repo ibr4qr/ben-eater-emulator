@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use compiler::rom::{ build_rom, Rom};
+    use vm::rom::{ build_rom, Rom};
 
 
     #[test]

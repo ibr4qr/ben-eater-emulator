@@ -1,4 +1,4 @@
-use compiler::rom::{build_rom, Rom};
+use vm::rom::{build_rom, Rom};
 
 #[warn(dead_code)]
 pub struct Emulator {

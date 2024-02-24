@@ -1,11 +1,9 @@
 [workspace]
 members = [
     "crates/assembler",
-    "crates/compiler",
     "crates/decompiler",
-    "crates/emulator",
-
+    "crates/vm",
 ]
 
-default-members = ["crates/compiler", "crates/assembler", "crates/decompiler", "crates/emulator"]
+default-members = ["crates/assembler", "crates/decompiler", "crates/vm"]
 
