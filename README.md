@@ -215,3 +215,21 @@ LDA 14
 SUB 13
 JC 6
 ```
+
+
+### Fibonacci series 
+
+```
+LDI 1 
+STA 13
+LDI 0
+STA 14
+LDA 13
+STA 15
+ADD 14
+OUT
+STA 13 
+LDA 15
+STA 14
+JMP 4
+```
