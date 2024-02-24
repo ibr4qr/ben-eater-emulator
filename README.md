@@ -233,3 +233,28 @@ LDA 15
 STA 14
 JMP 4
 ```
+
+
+
+
+### Compiling from higher level language to Assembly Language
+
+#### Lexer
+#### Parser
+#### Assembler Code Generator
+
+
+
+##### Expression Grammar:
+- program => declaration* EOF;
+- declaration => varDecl | statement;
+- varDecl => "var" IDENTIFIER "=" expression ";";
+- statement => exprStmt | printStmt;
+- exprStmt => expression ";";
+- printStmt => "print" expression ";"
+- expression => assignment;
+- assignment => (call "." )? IDENTIFIER "=" assignment | equality;
+- equality => comparison ( ("!=" | "==") comparison)*;
+- comparison => term ( (">" | ">=" | "<" ) term)*;
+- term => primary ( ("-" | "+") primary )*
+- primary => NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" | IDENTIFIER;
