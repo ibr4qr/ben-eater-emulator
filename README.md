@@ -171,4 +171,47 @@ LDA 14
 OUT
 ```
 
-### Counting to 5
+### De counter from 15 to 0
+
+```
+LDI 15
+STA 15
+LDI 1
+STA 14
+LDA 15
+SUB 14
+OUT
+JC 4
+```
+
+
+### from 0 to 254, step of 2 
+```
+LDI 10
+STA 14
+LDI 2
+STA 15
+LDI 0
+ADD 15
+OUT
+JMP 5
+```
+
+
+### From 0 to 10, step 2
+
+```
+LDI 0
+STA 13
+LDI 2
+STA 15
+LDI 10
+STA 14
+LDA 13
+ADD 15
+OUT
+STA 13
+LDA 14
+SUB 13
+JC 6
+```

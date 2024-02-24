@@ -37,84 +37,73 @@ impl Emulator {
                 let address = value;
                 let loaded_value = self.rom.load_value(address).unwrap();
                 self.ra = *loaded_value;
-                // println!("PC: {}, LDA {}", self.ir, loaded_value);
+                self.increment_instruction_register();
             },
             2 => {
                 // ADD 
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                // println!("PC: {}, ADD {} {}", self.ir, self.ra, self.rb);
                 let sum = self.ra + self.rb;
                 self.ra = sum;
+                self.increment_instruction_register();
             },
             3 => {
                 // SUB
                 let memory_address = value;
                 let loaded_value = self.rom.load_value(memory_address).unwrap();
                 self.rb = *loaded_value;
-                // println!("PC: {}, SUB ({} - {})", self.ir, self.ra, self.rb);
                 let diff = self.ra -  self.rb;
-
                 self.ra = diff;
                 self.zf = diff == 0;
                 self.cf = diff != 0;
+                self.increment_instruction_register();
             }
             4 => {
                 // STA 
                 let address = value;
                 let value = self.ra;
                 self.rom.set_value(address, value);
-
-                // println!("PC: {}, STA {}", self.ir , address);
+                self.increment_instruction_register();
             }
             0 => {
                 let value = self.ra;
-                // println!("PC: {}, OUT {}", self.ir, value);
                 println!("{}", value);
+                self.increment_instruction_register();
+
+
             },
             6 => {
-                // println!("PC: {}, JMP {}", self.ir, value);
-                // SET PC TO AAAA 
                 let address = value;
                 self.pc = address;
                 self.ir = address;
-                
             },
             7 => {
-                // LDI
-                // println!("PC: {}, LDI {}", self.ir, value);
                 self.ra = value;
+                self.increment_instruction_register();
+
             },
             9 => {
-                // JC
-                // println!("PC: {}, JC: {}", self.ir, value);
                 if self.cf {
                     self.pc = value;
                     self.ir = value;
                     self.cf = false;
+                } else {
+                    self.increment_instruction_register();
                 }
             },
             8 => {
                 //JZ
-                // println!("PC: {}, JZ {}", self.ir, value);
                 if self.zf {
                     self.pc = value;
                     self.ir = value;
                     self.zf = false;
+                } else {
+                    self.increment_instruction_register();
                 }
             }
             _ => println!("it s something else"),
         }
-        
-
-        // println!("
-        //     ra: {},
-        //     rb: {},
-        //     cf: {},
-        //     zf: {}
-        // ", self.ra, self.rb, self.cf, self.zf);
-
     }
 
 
@@ -122,7 +111,6 @@ impl Emulator {
        while self.ir < (self.program_length as u8) {
         let instruction = self.rom.load_value(self.ir).unwrap();
         self.execute_instruction(*instruction);
-        self.increment_instruction_register();
        }
     }
 
