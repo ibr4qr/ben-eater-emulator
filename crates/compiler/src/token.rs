@@ -1,6 +1,7 @@
 
 #[derive(Debug)]
 #[derive(Clone, Copy)]
+#[derive(PartialEq)]
 pub enum TokenType {
     /**
      * single character token
@@ -23,8 +24,8 @@ pub enum TokenType {
 #[derive(Debug)]
 #[derive(Clone)]
 pub struct Token {
-    token_type: TokenType,
-    lexeme: String,
+    pub token_type: TokenType,
+    pub lexeme: String,
 }
 
 

@@ -1,10 +1,10 @@
 pub mod lexer;
 pub mod parser;
 pub mod token;
+pub mod ast_nodes;
 use lexer::{build_lexer, Lexer};
 use parser::{build_parser, Parser};
 use token::Token;
-
 
 #[warn(dead_code)]
 pub struct Compiler<'a> {

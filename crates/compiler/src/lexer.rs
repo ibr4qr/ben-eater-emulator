@@ -74,9 +74,15 @@ impl Lexer {
                 }
 
                 // check if it's a keyword
-                let lexeme = String::from_iter(&chars[self.counter..self.back_track]);
-                let token = build_token(TokenType::Identifier, lexeme);
-                another_tokens.push(token);
+                let lexeme: String = String::from_iter(&chars[self.counter..self.back_track]);
+               
+                if lexeme == "var" {
+                    let token = build_token(TokenType::Var, lexeme);
+                    another_tokens.push(token);
+                } else {
+                    let token = build_token(TokenType::Identifier, lexeme);
+                    another_tokens.push(token);
+                }
             }
 
 
