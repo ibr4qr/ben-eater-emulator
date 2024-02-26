@@ -19,7 +19,11 @@ impl Lexer {
             let number_literal_regex = Regex::new("^[0-9]").unwrap();
             let is_alpha = Regex::new("[A-Za-z]").unwrap();
 
-            if (char == '+') {
+            if char == ';' {
+                let lexeme = String::from_iter(&chars[self.counter..self.back_track]);
+                let token = build_token(TokenType::SemiColon, lexeme);
+                another_tokens.push(token);
+            } else if (char == '+') {
                 let lexeme = String::from_iter(&chars[self.counter..self.back_track]);
                 let token = build_token(TokenType::Plus, lexeme);
                 another_tokens.push(token);
@@ -78,6 +82,9 @@ impl Lexer {
                
                 if lexeme == "var" {
                     let token = build_token(TokenType::Var, lexeme);
+                    another_tokens.push(token);
+                } else if lexeme == "print" {
+                    let token = build_token(TokenType::Print, lexeme);
                     another_tokens.push(token);
                 } else {
                     let token = build_token(TokenType::Identifier, lexeme);

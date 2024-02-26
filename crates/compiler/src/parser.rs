@@ -26,7 +26,18 @@ impl Parser {
         if self.match_token(TokenType::Var) {
             return self.var_declaration();
         } 
+        if self.match_token(TokenType::Print) {
+            return self.print_declaration();
+        }
         return self.statement();
+    }
+
+    fn print_declaration(&mut self) -> Node {
+        self.consume(TokenType::LeftParen);
+        let expr = self.expression();
+        self.consume(TokenType::RightParen);
+        self.consume(TokenType::SemiColon);
+        return Node::PrintDecl { argument: Box::new(expr) }
     }
 
     fn var_declaration(&mut self) -> Node {
@@ -36,6 +47,9 @@ impl Parser {
         if self.match_token(TokenType::Equal) {
             initializer = self.expression();
         }
+
+
+        self.consume(TokenType::SemiColon);
 
         return Node::VarDecl { identifier: identifier.lexeme, initializer: Box::new(initializer)}
     }
@@ -87,9 +101,10 @@ impl Parser {
     }
 
     fn term(&mut self) -> Node {
+        println!("current pos: {}", self.counter);
         let mut expr: Node = self.factor();
 
-        while self.match_token(TokenType::Plus) || self.match_token(TokenType::Minus) {
+        while self.match_token(TokenType::Plus) {
             let operator: Token = self.previous().clone();
             let right: Node = self.factor();
             expr = Node::BinaryExpr { operator: operator, right: Box::new(right), left: Box::new(expr)};
@@ -110,7 +125,6 @@ impl Parser {
 
           return Node::UnaryExpr { operator: operator, right:Box::new(right)}
         }
- 
         return self.call();
     }
 
@@ -121,20 +135,15 @@ impl Parser {
 
     fn primary(&mut self) -> Node {
         if self.match_token(TokenType::Number) {
-            return Node::Literal { value: self.previous().lexeme.parse::<u8>().unwrap() }
+            return Node::Literal { value: self.previous().clone().lexeme.parse::<u8>().unwrap() }
         }
 
         return Node::Nil;
     }
 
-
-
-
-
-
     // control
     fn is_at_end(&self) -> bool {
-        return self.counter == self.tokens.len() - 1
+        return self.counter == self.tokens.len();
     }
 
     fn match_token(&mut self, token_type: TokenType) -> bool {
@@ -147,13 +156,6 @@ impl Parser {
     }
 
     fn advance(&mut self) -> Token {
-    //    if !self.is_at_end()  {
-    //         self.counter = self.counter + 1;
-    //         return true;
-    //    }
-
-    //     return false;
-
 
         if !self.is_at_end() {
             self.counter = self.counter + 1;

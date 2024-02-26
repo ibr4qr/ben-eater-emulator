@@ -258,3 +258,24 @@ JMP 4
 - comparison => term ( (">" | ">=" | "<" ) term)*;
 - term => primary ( ("-" | "+") primary )*
 - primary => NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" | IDENTIFIER;
+
+
+###### Examples:
+```
+print(10+20); var me = 100;
+```
+
+will be parsed producing this ast.
+
+
+first declaration:
+
+```
+PrintDecl { argument: BinaryExpr { operator: Token { token_type: Plus, lexeme: "+" }, right: Literal { value: 20 }, left: Literal { value: 10 } } }
+```
+
+
+second declaration:
+```
+declaration: VarDecl { identifier: "me", initializer: Literal { value: 100 } }
+```

@@ -19,6 +19,9 @@ pub enum Node {
         identifier: String,
         initializer: Box<Node>
     },
+    PrintDecl {
+        argument: Box<Node>
+    },
     Nil
 }
 
