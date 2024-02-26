@@ -1,25 +1,24 @@
-use std::ptr::null;
 
 use crate::token::{Token, TokenType};
-use crate::ast_nodes::{ Node, Statement};
-
+use crate::ast_nodes::Node;
 
 
 
 pub struct Parser {
-    program: Vec<Statement>,
+    program: Vec<Node>,
     counter: usize,
-    back_track: usize,
     tokens: Vec<Token>
 }
 
 impl Parser {
-    pub fn parse(&mut self, tokens: Vec<Token>) {
+    pub fn parse(&mut self, tokens: Vec<Token>) -> &Vec<Node>{
         self.tokens = tokens;
         while !self.is_at_end() {
             let declaration = self.declaration();
-            println!("declaration: {:?}", declaration);
+            self.program.push(declaration);
         }
+
+        return &self.program;
     }
 
     fn declaration(&mut self) -> Node {
@@ -195,7 +194,6 @@ pub fn build_parser() -> Parser {
     Parser {
         program: vec![],
         counter: 0,
-        back_track: 1,
         tokens: vec![]
     }
 }

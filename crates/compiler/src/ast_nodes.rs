@@ -2,6 +2,7 @@ use crate::token::Token;
 
 
 #[derive(Debug)]
+#[derive(Clone)]
 pub enum Node {
     UnaryExpr {
         operator: Token,
