@@ -3,8 +3,10 @@ pub mod parser;
 pub mod token;
 pub mod ast_nodes;
 pub mod code_gen;
+pub mod memory_manager;
 
 use ast_nodes::Node;
+use code_gen::build_code_gen;
 use lexer::{build_lexer, Lexer};
 use parser::{build_parser, Parser};
 use token::Token;
@@ -20,8 +22,8 @@ impl Compiler<'_> {
     pub fn compile(&mut self) {
        let tokens:  Vec<Token> =  self.lexer.scan(self.code);
        let ast: &Vec<Node> = self.parser.parse(tokens);
-       println!("program: {:?}", ast);
-       // TODO: code gen module
+        let mut code_generator = build_code_gen(ast.to_vec());
+        code_generator.gen_code();
     }   
 }
 

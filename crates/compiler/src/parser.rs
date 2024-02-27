@@ -100,7 +100,6 @@ impl Parser {
     }
 
     fn term(&mut self) -> Node {
-        println!("current pos: {}", self.counter);
         let mut expr: Node = self.factor();
 
         while self.match_token(TokenType::Plus) {
