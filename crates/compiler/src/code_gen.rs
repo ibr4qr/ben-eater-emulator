@@ -1,11 +1,12 @@
-use crate::{ast_nodes::Node, token::{Token, TokenType}};
+use crate::{ast_nodes::Node, memory_manager::{build_memory_manager, MemoryManager}, token::{Token, TokenType}};
 
 
 
 
 pub struct CodeGen {
     ast: Vec<Node>,
-    code: String
+    code: String,
+    memory_manager: MemoryManager,
 }
 
 
@@ -21,14 +22,30 @@ impl CodeGen {
         let mut code = String::new();
         match node {
             Node::BinaryExpr { operator, right, left } => {
-                let left_code = self.gen_node_code(*left);
-                let right_code = self.gen_node_code(*right);
-                let binary_code = self.gen_binary_code(operator);
+                let mut left_code = self.gen_node_code(*left);
+                let mut right_code = self.gen_node_code(*right);
+                let mut binary_code = self.gen_binary_code(operator);
 
+                let address = self.memory_manager.get_memory_offset();
+
+                left_code =  "LDI ".to_string() + &left_code;
+                left_code = left_code + "\nSTA " + &address.to_string(); 
+
+                /*
+                    get the address from memory manager,
+                    this will be an offset, we then refine 
+                    that address by knowing the program length, 
+                    if the program length + the number of values stored inside the
+                    rom is greater that 16 bytes than we need to throw
+                    an error, as said, rom of 16 bytes is the biggest limitation
+                    of the architecture we are trying to compile to...
+                */
+                
+                right_code = "LDI ".to_string() + &right_code;
+                binary_code = binary_code + " " + &address.to_string();
                 code = left_code + "\n" + &right_code +  "\n" + &binary_code;
             },
             Node::Literal { value } => {
-                code = code + "LDI ";
                 code = code + &value.to_string();
             },
             Node::UnaryExpr { operator, right } => {
@@ -89,6 +106,7 @@ impl CodeGen {
 pub fn build_code_gen(ast: Vec<Node>) -> CodeGen {
     CodeGen {
         ast,
-        code: String::new()
+        code: String::new(),
+        memory_manager: build_memory_manager()
     }
 }
