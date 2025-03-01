@@ -1,171 +1,25 @@
 use std::fs::File;
-use std::io::{self, BufRead, Read, Write};
-
-use emualtor::{build_emulator, Emulator};
-
-
-pub mod emualtor;
-pub mod rom;
+use std::io::{self, Read};
+use vm::emulator::{build_emulator, Emulator};
 
 fn main() {
-    /**
-     * sample program
-     * LDI 17
-     * LDI 20
-     * OUT
-     * LDI 17
-     * OUT
-     */
-    #[warn(dead_code)]
-    let sample1 = [17, 20, 0, 17, 0];
-
-    /**
-     * 0, LDI 12
-     * 1, OUT
-     * 2, STA 16
-     * 3, LDI 6
-     * 4, OUT
-     * 5, LDA 16
-     * 6, OUT
-     */
-    #[warn(dead_code)]
-    let sample2 = [
-        0b01111100, 0b00000000, 0b01001111, 0b01110110, 0b00000000, 0b00000000, 0b00011111, 0,
-    ];
-
-    /**
-     *  0, LDI 10
-     *  1, OUT
-     *  2, JMP
-     */
-    #[warn(dead_code)]
-    let sample3 = [0b01111010, 0b00000000, 0b01100000];
-
-    /**
-     * LDI 1
-     * OUT
-     * STA 13
-     * LDI 10
-     * SUB 13
-     * OUT
-     * STA 14
-     * LDI 2
-     */
-    let sample4 = [
-        0b01110001, 0b00000000, 0b01001011, 0b01111010, 0b00111011, 0b00000000, 0b01001100,
-        0b01110110, 0b00101100, 0b00000000,
-    ];
-
-    /**
-     * count to 5
-     * LDI 5
-     * STA 14
-     * LDI 1 ==> a = 1
-     * STA 10
-     * ADD 10
-     * STA 15
-     * LDA 14
-     * SUB 15
-     * JZ 4
-     */
-    #[warn(dead_code)]
-    let sample5 = [
-        0b01110101, // LDI 5
-        0b01001110, // STA 14 ==> 5 is in 14 address memory
-
-
-        // initial value store 1 somewhere into memory
-        0b01110001, // LDI 1
-        0b01001010, // STA 10 ==> 1 is in 10 address memory
-        
-        0b00101010, // ADD 10
-        0b01001111, // STA 15
-        
-
-
-        0b00011110, // LDA 14
-        0b00111111, // SUB 15
-        0b10010011  // JZ  4
-    ];
-
-
-    /**
-     * LDI 15
-     * STA 15
-     * LDI 1
-     * STA 14
-     */
-
-
-
-
-
-     /**
-      * sample 6 has a decounter from 15 to 0, using the JC, Jump carry 
-      * the JC instruction jumps to an instruction only if the carry Flag cf is set to true
-      * cf is set to true when, given and subtraction the result is not zero
-      */
-
-      #[warn(dead_code)]
-      let sample6 = [
-        0b01111111, // LDI 15
-        0b01001111, // STA 15
-        0b01110001, // LDI 1
-        0b01001110, // STA 14
-        0b00011111, // LDA 15
-        0b00111110, // SUB 14
-        0b00000000, // OUT
-        0b10010100, // JC   4
-    ];
-
-
-
-
-    #[warn(dead_code)]
-    // counting to 15
-    let sample7 = [
-        // initialization
-        0b01111111, // LDI 15
-        0b01001111, // STA 15
-        0b01110001, // LDI 1
-        0b01001110, // STA 14
-        0b01110000, // LDI 0
-        0b01001101, // STA 13
-
-        // load initial state to register A
-        0b00011101, // LDA 13,
-        
-        // increment counter & persist result
-        0b00101110, // ADD 14
-        0b01001101, // STA 13
-
-        // // check if we need to increment or not
-        0b00011111, // LDA 15
-        0b00111101, // SUB 13
-        
-        0b00011101, // LDA 13
-
-        0b00000000, // OUT
-        0b10010000, // JC 
-    ];
-
-    let sample9 =  [113, 34, 0];
-
-
+    // TODO: produce sample file like this
+    // The following put the a binary program to output.bin
+    // The binary program count from 10 to 1
+    //  printf '\x51\x4F\x5A\x0\x3F\x73' > output.bin
     if let Ok(binary_code) = get_binary_program() {
         let mut emulator: Emulator = build_emulator();
-        emulator.load_program(&binary_code);    
+        emulator.load_program(&binary_code);
         emulator.execute_program();
-
+    } else {
+        println!("Error while trying to open binary file.");
     }
 }
 
-#[warn(unused_must_use)]
-fn get_binary_program() -> std::io::Result<(Vec<u8>)>  {
-        let mut file = File::open("./test")?;
-        // read the same file back into a Vec of bytes
-        let mut buffer = Vec::<u8>::new();
-        file.read_to_end(&mut buffer)?;
+fn get_binary_program() -> io::Result<Vec<u8>> {
+    let mut file = File::open("./output.bin")?;
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer)?;
 
-        Ok((buffer))
+    Ok(buffer)
 }

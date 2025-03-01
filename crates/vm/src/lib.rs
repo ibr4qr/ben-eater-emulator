@@ -1,3 +1,3 @@
+pub mod emulator;
 pub mod rom;
-pub mod alu;
-pub mod registers;
+pub mod instruction_set;

@@ -3,7 +3,12 @@ members = [
     "crates/assembler",
     "crates/decompiler",
     "crates/vm",
-    "crates/compiler"
+    "crates/compiler",
 ]
 
-default-members = ["crates/assembler", "crates/decompiler", "crates/vm", "crates/compiler"]
+default-members = [
+    "crates/assembler",
+    "crates/decompiler",
+    "crates/vm",
+    "crates/compiler",
+]

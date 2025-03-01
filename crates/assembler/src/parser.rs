@@ -1,122 +1,104 @@
-
 use std::fs::File;
-use std::io::{self, BufRead, Read, Write};
+use std::io::{self, BufRead};
 use std::path::Path;
 use std::u8;
-
+use vm::instruction_set::InstructionSet;
 
 pub struct Parser {
-    // mut binary_code: Vec<u8> = vec![];
-    // binary_code: Vec<u8>
+    pub binary_code: Vec<u8>, // binary_code: Vec<u8>
 }
 
 impl Parser {
-     pub fn get_line(&self, line: String) -> u8 {
+    pub fn parse_instruction(&self, line: String) -> u8 {
+        // in collection we now have as first argument the op_code and as second the argument of the op_code
         let parts = line.split(" ");
         let collection = parts.collect::<Vec<&str>>();
-        let mut instruction = collection[0];
+
+        // we split the op_code from the argument
+        let op_code = collection[0];
         let mut argument = 0;
-    
-        let mut rawInstruction = 0;
-    
-        match(instruction) {
-            // "NOP" => {
-            //     rawInstruction = 0;
-            // },
+
+        let mut raw_instruction = 0;
+
+        match op_code {
             "LDA" => {
-                rawInstruction = 1;
+                raw_instruction = InstructionSet::LDA as u8;
                 argument = (collection[1]).parse().unwrap();
-            },
+            }
             "ADD" => {
-                rawInstruction = 2;
+                raw_instruction = InstructionSet::ADD as u8;
                 argument = (collection[1]).parse().unwrap();
-            },
+            }
             "SUB" => {
-                rawInstruction = 3;
+                raw_instruction = InstructionSet::SUB as u8;
                 argument = (collection[1]).parse().unwrap();
-            },
+            }
             "STA" => {
-                rawInstruction = 4;
+                raw_instruction = InstructionSet::STA as u8;
                 argument = (collection[1]).parse().unwrap();
-            },
+            }
             "OUT" => {
-                rawInstruction = 0;
-            },
+                raw_instruction = InstructionSet::OUT as u8;
+            }
             "JMP" => {
-               rawInstruction = 6;
-               argument = (collection[1]).parse().unwrap();
-            },
+                raw_instruction = InstructionSet::JMP as u8;
+                argument = (collection[1]).parse().unwrap();
+            }
             "LDI" => {
-               rawInstruction = 7;
-               argument = (collection[1]).parse().unwrap();
-            },
+                raw_instruction = InstructionSet::LDI as u8;
+                argument = (collection[1]).parse().unwrap();
+            }
             "JC" => {
-               rawInstruction = 9;
-               argument = (collection[1]).parse().unwrap();
-            },
+                raw_instruction = InstructionSet::JC as u8;
+                argument = (collection[1]).parse().unwrap();
+            }
             "JZ" => {
-              rawInstruction = 8;
-              argument = (collection[1]).parse().unwrap();
-            },
-            "JNC" => {
-                println!("JNCC");
-            },
+                raw_instruction = InstructionSet::JZ as u8;
+                argument = (collection[1]).parse().unwrap();
+            }
             "HALT" => {
                 println!("HALLTTTT");
-            },
+            }
             _ => println!("it s something else"),
         }
-    
-    
-        let mut final_instruction = 0;
-        let mut instruction = rawInstruction << 4;
-    
-    
-        final_instruction = (rawInstruction << 4) & 0b11110000;
+
+        let mut final_instruction;
+
+        // craft the final instructin with the op_code
+        // in the 4 MSB and the argument in the 4 LSB
+        final_instruction = (raw_instruction << 4) & 0b11110000;
         final_instruction = final_instruction | argument;
-    
-    
-        return final_instruction;
-     }
 
-     fn read_lines<P>(&self, filename: P) -> io::Result<io::Lines<io::BufReader<File>>> where P: AsRef<Path>, {
-            let file = File::open(filename)?;
-            Ok(io::BufReader::new(file).lines())
-     }
+        final_instruction
+    }
 
-     pub fn product_output_file(&self, byte_code: &mut Vec<u8>) -> std::io::Result<()> {
+    fn read_file<P>(&self, filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+    where
+        P: AsRef<Path>,
+    {
+        let file = File::open(filename)?;
+        Ok(io::BufReader::new(file).lines())
+    }
 
-        self.get_lines(byte_code);
+    pub fn produce_binary_code(&mut self, filename: &String) {
+        self.get_lines(filename);
+    }
 
-        {
-            let mut file = File::create("test")?;
-            // Write a slice of bytes to the file
-            file.write_all(byte_code)?;
-        }
-    
-        {
-            let mut file = File::open("test")?;
-            let mut buffer = Vec::<u8>::new();
-            file.read_to_end(&mut buffer)?;
-            println!("assembler produced: {:?}", buffer);
-        }
-    
-        Ok(())
-     }
-
-
-     fn get_lines(&self, binary_code: &mut Vec<u8>) {
-        if let Ok(lines) = self.read_lines("./poem.txt") {
+    fn get_lines(&mut self, filename: &String) {
+        if let Ok(lines) = self.read_file(filename) {
             for line in lines.flatten() {
                 if !line.trim().is_empty() {
-                    let instruction: u8 = self.get_line(line);
-                    binary_code.push(instruction);
+                    // produce instruction and put it in binary_code
+                    let instruction: u8 = self.parse_instruction(line);
+                    self.binary_code.push(instruction);
                 }
             }
         }
-     }
+    }
 }
 
 pub fn build_parser() -> Parser {
-    Parser {}
+    Parser {
+        binary_code: vec![],
+    }
 }

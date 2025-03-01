@@ -20,8 +20,8 @@ pub struct Compiler<'a> {
 
 impl Compiler<'_> {
     pub fn compile(&mut self) {
-       let tokens:  Vec<Token> =  self.lexer.scan(self.code);
-       let ast: &Vec<Node> = self.parser.parse(tokens);
+        let tokens:  Vec<Token> =  self.lexer.scan(self.code);
+        let ast: &Vec<Node> = self.parser.parse(tokens);
         let mut code_generator = build_code_gen(ast.to_vec());
         code_generator.gen_code();
     }   
