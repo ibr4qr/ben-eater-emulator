@@ -1,4 +1,7 @@
-use assembler::parser::{build_parser, Parser};
+use assembler::{
+    parser::{build_parser, Parser},
+    reader::build_reader,
+};
 use std::env;
 use std::fs::File;
 use std::io::Write;
@@ -29,7 +32,10 @@ fn main() {
         // execute the program using the VM
         let mut parser: Parser = build_parser();
         let filename = &args[input_flag_position + 1];
-        parser.produce_binary_code(filename);
+
+        let reader = build_reader();
+        let instructions = reader.get_lines(filename);
+        parser.parse(instructions);
 
         if let Some(output_flag_position) = args.iter().position(|arg| arg == "--out") {
             let filename = &args[output_flag_position + 1];

@@ -1,6 +1,3 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
 use std::u8;
 use vm::instruction_set::InstructionSet;
 
@@ -57,9 +54,9 @@ impl Parser {
                 argument = (collection[1]).parse().unwrap();
             }
             "HALT" => {
-                println!("HALLTTTT");
+                raw_instruction = InstructionSet::HALT as u8;
             }
-            _ => println!("it s something else"),
+            _ => println!("The instruction {} is not supported!", op_code),
         }
 
         let mut final_instruction;
@@ -72,27 +69,10 @@ impl Parser {
         final_instruction
     }
 
-    fn read_file<P>(&self, filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-    where
-        P: AsRef<Path>,
-    {
-        let file = File::open(filename)?;
-        Ok(io::BufReader::new(file).lines())
-    }
-
-    pub fn produce_binary_code(&mut self, filename: &String) {
-        self.get_lines(filename);
-    }
-
-    fn get_lines(&mut self, filename: &String) {
-        if let Ok(lines) = self.read_file(filename) {
-            for line in lines.flatten() {
-                if !line.trim().is_empty() {
-                    // produce instruction and put it in binary_code
-                    let instruction: u8 = self.parse_instruction(line);
-                    self.binary_code.push(instruction);
-                }
-            }
+    pub fn parse(&mut self, instructions: Vec<String>) {
+        for instruction in instructions {
+            let machine_code: u8 = self.parse_instruction(instruction);
+            self.binary_code.push(machine_code);
         }
     }
 }
