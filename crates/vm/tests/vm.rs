@@ -8,7 +8,7 @@ mod tests {
 
         let sample = [
             0x52, // LDI 2
-            0xE,  // OUT
+            0xE0, // OUT
         ];
 
         {
@@ -24,7 +24,7 @@ mod tests {
 
             // A register should have value 2
             emulator.fetch_instruction();
-            assert_eq!(emulator.ir, 0x0);
+            assert_eq!(emulator.ir, 0xE0);
         }
     }
 

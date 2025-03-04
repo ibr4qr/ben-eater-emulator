@@ -22,7 +22,9 @@ dependencies = [
 name = "compiler"
 version = "0.1.0"
 dependencies = [
+ "assembler",
  "regex",
+ "vm",
 ]
 
 [[package]]

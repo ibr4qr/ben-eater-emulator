@@ -1,17 +1,14 @@
-
-use crate::token::{Token, TokenType};
 use crate::ast_nodes::Node;
-
-
+use crate::token::{Token, TokenType};
 
 pub struct Parser {
     program: Vec<Node>,
     counter: usize,
-    tokens: Vec<Token>
+    tokens: Vec<Token>,
 }
 
 impl Parser {
-    pub fn parse(&mut self, tokens: Vec<Token>) -> &Vec<Node>{
+    pub fn parse(&mut self, tokens: Vec<Token>) -> &Vec<Node> {
         self.tokens = tokens;
         while !self.is_at_end() {
             let declaration = self.declaration();
@@ -24,7 +21,7 @@ impl Parser {
     fn declaration(&mut self) -> Node {
         if self.match_token(TokenType::Var) {
             return self.var_declaration();
-        } 
+        }
         if self.match_token(TokenType::Print) {
             return self.print_declaration();
         }
@@ -36,7 +33,9 @@ impl Parser {
         let expr = self.expression();
         self.consume(TokenType::RightParen);
         self.consume(TokenType::SemiColon);
-        return Node::PrintDecl { argument: Box::new(expr) }
+        return Node::PrintDecl {
+            argument: Box::new(expr),
+        };
     }
 
     fn var_declaration(&mut self) -> Node {
@@ -47,18 +46,20 @@ impl Parser {
             initializer = self.expression();
         }
 
-
         self.consume(TokenType::SemiColon);
 
-        return Node::VarDecl { identifier: identifier.lexeme, initializer: Box::new(initializer)}
+        return Node::VarDecl {
+            identifier: identifier.lexeme,
+            initializer: Box::new(initializer),
+        };
     }
 
-    fn statement(&mut self) -> Node{
+    fn statement(&mut self) -> Node {
         return self.expression_statement();
     }
 
     fn expression_statement(&mut self) -> Node {
-       return self.expression();
+        return self.expression();
     }
 
     fn expression(&mut self) -> Node {
@@ -72,12 +73,12 @@ impl Parser {
     }
 
     fn or(&mut self) -> Node {
-        let mut expr: Node = self.and();
+        let expr: Node = self.and();
 
         // while self.match_token(TokenType::Or) {
         //     let operator: Token = self.previous().clone();
         //     let right: Node = self.and();
-        //     expr = 
+        //     expr =
         // }
         return expr;
     }
@@ -102,10 +103,14 @@ impl Parser {
     fn term(&mut self) -> Node {
         let mut expr: Node = self.factor();
 
-        while self.match_token(TokenType::Plus) {
+        while self.match_token(TokenType::Plus) || self.match_token(TokenType::Minus) {
             let operator: Token = self.previous().clone();
             let right: Node = self.factor();
-            expr = Node::BinaryExpr { operator: operator, right: Box::new(right), left: Box::new(expr)};
+            expr = Node::BinaryExpr {
+                operator: operator,
+                right: Box::new(right),
+                left: Box::new(expr),
+            };
         }
 
         return expr;
@@ -121,7 +126,10 @@ impl Parser {
             let operator: Token = self.previous().clone();
             let right: Node = self.unary();
 
-          return Node::UnaryExpr { operator: operator, right:Box::new(right)}
+            return Node::UnaryExpr {
+                operator: operator,
+                right: Box::new(right),
+            };
         }
         return self.call();
     }
@@ -133,7 +141,13 @@ impl Parser {
 
     fn primary(&mut self) -> Node {
         if self.match_token(TokenType::Number) {
-            return Node::Literal { value: self.previous().clone().lexeme.parse::<u8>().unwrap() }
+            return Node::Literal {
+                value: self.previous().clone().lexeme.parse::<u8>().unwrap(),
+            };
+        }
+
+        if self.match_token(TokenType::Identifier) {
+            // println!("a variable was called!!");
         }
 
         return Node::Nil;
@@ -154,11 +168,9 @@ impl Parser {
     }
 
     fn advance(&mut self) -> Token {
-
         if !self.is_at_end() {
             self.counter = self.counter + 1;
         }
-
 
         return self.previous().clone();
     }
@@ -167,32 +179,30 @@ impl Parser {
         return &self.tokens[self.counter - 1];
     }
 
-   fn check(&self, token_type: TokenType) -> bool {
-    if self.is_at_end() {
-        return false;
-    }
-    return self.peek().token_type == token_type;
-   }
-
-   fn peek(&self) -> &Token {
-    return &self.tokens[self.counter];
-   }
-
-   fn consume(&mut self, token_type: TokenType) -> Token {
-    if self.check(token_type)  {
-        return self.advance();
+    fn check(&self, token_type: TokenType) -> bool {
+        if self.is_at_end() {
+            return false;
+        }
+        return self.peek().token_type == token_type;
     }
 
-     panic!("something wrong");
-   }
+    fn peek(&self) -> &Token {
+        return &self.tokens[self.counter];
+    }
 
+    fn consume(&mut self, token_type: TokenType) -> Token {
+        if self.check(token_type) {
+            return self.advance();
+        }
+
+        panic!("Token not found {:?}", token_type);
+    }
 }
-
 
 pub fn build_parser() -> Parser {
     Parser {
         program: vec![],
         counter: 0,
-        tokens: vec![]
+        tokens: vec![],
     }
 }
